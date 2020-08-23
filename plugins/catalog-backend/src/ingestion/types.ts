@@ -15,6 +15,7 @@
  */
 
 import type { Entity, Location, LocationSpec } from '@backstage/catalog-model';
+import { RelationSpec } from './processors';
 
 //
 // HigherOrderOperation
@@ -47,6 +48,7 @@ export type LocationReader = {
 
 export type ReadLocationResult = {
   entities: ReadLocationEntity[];
+  relations: { relation: RelationSpec }[];
   errors: ReadLocationError[];
 };
 

@@ -16,7 +16,7 @@
 
 import { InputError, NotFoundError } from '@backstage/backend-common';
 import { Entity, LocationSpec } from '@backstage/catalog-model';
-import { LocationProcessorResult } from './types';
+import { LocationProcessorResult, RelationSpec } from './types';
 
 export function notFoundError(
   atLocation: LocationSpec,
@@ -66,4 +66,8 @@ export function entity(
   newEntity: Entity,
 ): LocationProcessorResult {
   return { type: 'entity', location: atLocation, entity: newEntity };
+}
+
+export function relation(spec: RelationSpec): LocationProcessorResult {
+  return { type: 'relation', relation: spec };
 }

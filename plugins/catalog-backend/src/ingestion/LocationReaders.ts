@@ -29,6 +29,7 @@ import { FileReaderProcessor } from './processors/FileReaderProcessor';
 import { GithubReaderProcessor } from './processors/GithubReaderProcessor';
 import { GitlabApiReaderProcessor } from './processors/GitlabApiReaderProcessor';
 import { GitlabReaderProcessor } from './processors/GitlabReaderProcessor';
+import { GroupPopulatorProcessor } from './processors/GroupPopulatorProcessor';
 import { BitbucketApiReaderProcessor } from './processors/BitbucketApiReaderProcessor';
 import { AzureApiReaderProcessor } from './processors/AzureApiReaderProcessor';
 import { UrlReaderProcessor } from './processors/UrlReaderProcessor';
@@ -87,6 +88,7 @@ export class LocationReaders implements LocationReader {
       new UrlReaderProcessor(),
       new YamlProcessor(),
       new ApiDefinitionAtLocationProcessor(),
+      new GroupPopulatorProcessor(),
       new EntityPolicyProcessor(entityPolicy),
       new LocationRefProcessor(),
       new AnnotateLocationEntityProcessor(),
@@ -106,7 +108,11 @@ export class LocationReaders implements LocationReader {
   }
 
   async read(location: LocationSpec): Promise<ReadLocationResult> {
-    const output: ReadLocationResult = { entities: [], errors: [] };
+    const output: ReadLocationResult = {
+      entities: [],
+      relations: [],
+      errors: [],
+    };
     let items: LocationProcessorResult[] = [result.location(location, false)];
 
     for (let depth = 0; depth < MAX_DEPTH; ++depth) {
@@ -138,6 +144,10 @@ export class LocationReaders implements LocationReader {
           output.errors.push({
             location: item.location,
             error: item.error,
+          });
+        } else if (item.type === 'relation') {
+          output.relations.push({
+            relation: item.relation,
           });
         }
       }

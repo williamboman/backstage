@@ -44,9 +44,9 @@ export class GroupEntityV1alpha1Policy implements EntityPolicy {
         .object({
           type: yup.string().required().min(1),
           parent: yup.string().notRequired().min(1),
-          ancestors: yup.array(yup.string()).required(),
-          children: yup.array(yup.string()).required(),
-          descendants: yup.array(yup.string()).required(),
+          // ancestors: yup.array(yup.string()).required(),
+          children: yup.array(yup.string()).notRequired(),
+          // descendants: yup.array(yup.string()).required(),
         })
         .required(),
     });

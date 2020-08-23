@@ -76,6 +76,12 @@ export type LocationProcessor = {
   ): Promise<void>;
 };
 
+export type RelationSpec = {
+  type: string;
+  source: { kind: string; namespace?: string; name: string };
+  target: { kind: string; namespace?: string; name: string };
+};
+
 export type LocationProcessorEmit = (
   generated: LocationProcessorResult,
 ) => void;
@@ -98,6 +104,11 @@ export type LocationProcessorEntityResult = {
   location: LocationSpec;
 };
 
+export type LocationProcessorRelationResult = {
+  type: 'relation';
+  relation: RelationSpec;
+};
+
 export type LocationProcessorErrorResult = {
   type: 'error';
   error: Error;
@@ -108,6 +119,7 @@ export type LocationProcessorResult =
   | LocationProcessorLocationResult
   | LocationProcessorDataResult
   | LocationProcessorEntityResult
+  | LocationProcessorRelationResult
   | LocationProcessorErrorResult;
 
 export type LocationProcessorRead = (
