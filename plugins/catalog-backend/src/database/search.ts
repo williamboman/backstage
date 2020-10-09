@@ -28,12 +28,19 @@ const SPECIAL_KEYS = [
   'metadata.generation',
 ];
 
+// The maximum length allowed for search values. These columns are indexed, and
+// database engines do not like to index on massive values. For example,
+// postgres will balk after 8191 byte line sizes.
+const MAX_VALUE_LENGTH = 200;
+
+// Takes any value from an object and turns it into a value string for the
+// search table
 function toValue(current: any): string | null {
   if (current === undefined || current === null) {
     return null;
   }
 
-  return String(current).toLowerCase();
+  return String(current).toLowerCase().substr(0, MAX_VALUE_LENGTH);
 }
 
 // Helper for iterating through a nested structure and outputting a list of
