@@ -26,8 +26,11 @@ describe('search', () => {
       visitEntityPart('eid', '', input, output);
       expect(output).toEqual([
         { entity_id: 'eid', key: 'a', value: 'b' },
+        { entity_id: 'eid', key: 'a.b', value: 'true' },
         { entity_id: 'eid', key: 'a', value: 'c' },
+        { entity_id: 'eid', key: 'a.c', value: 'true' },
         { entity_id: 'eid', key: 'a', value: 'd' },
+        { entity_id: 'eid', key: 'a.d', value: 'true' },
       ]);
     });
 

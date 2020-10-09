@@ -56,7 +56,9 @@ function toValue(current: any): string | null {
 // "a", "1"
 // "b.c", null
 // "b.e": "f"
+// "b.e.f": "true"
 // "b.e": "g"
+// "b.e.g": "true"
 // "h.i": "1"
 // "h.j": "k"
 // "h.i": "2"
@@ -90,7 +92,27 @@ export function visitEntityPart(
   // array
   if (Array.isArray(current)) {
     for (const item of current) {
+      // NOTE(freben): The reason that these are output in two different ways,
+      // is to support use cases where you want to express that MORE than one
+      // tag is present in a list. Since the EntityFilters structure is a
+      // record, you can't have several entries of the same key. Therefore
+      // you will have to match on
+      //
+      // { "a.b": ["true"], "a.c": ["true"] }
+      //
+      // rather than
+      //
+      // { "a": ["b", "c"] }
+      //
+      // because the latter means EITHER b or c has to be present.
       visitEntityPart(entityId, path, item, output);
+      if (typeof item === 'string') {
+        output.push({
+          entity_id: entityId,
+          key: `${path}.${item}`,
+          value: 'true',
+        });
+      }
     }
     return;
   }
